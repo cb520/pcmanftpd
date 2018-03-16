@@ -1,0 +1,431 @@
+K 25
+svn:wc:ra_dav:version-url
+V 25
+/pcmanftpd/!svn/ver/1/src
+END
+ServerGeneralPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcmanftpd/!svn/ver/1/src/ServerGeneralPage.h
+END
+FilePermMap.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/FilePermMap.h
+END
+FtpSock.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/FtpSock.cpp
+END
+BrowseDialog.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/pcmanftpd/!svn/ver/1/src/BrowseDialog.cpp
+END
+IniFile.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/IniFile.h
+END
+FtpServer.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/FtpServer.h
+END
+InputDlg.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/InputDlg.cpp
+END
+LogEdit.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/LogEdit.cpp
+END
+FtpDataCon.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/FtpDataCon.h
+END
+FtpUser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/FtpUser.cpp
+END
+MainFrm.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/MainFrm.cpp
+END
+FtpUserEx.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/FtpUserEx.h
+END
+StdAfx.h
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/pcmanftpd/!svn/ver/1/src/StdAfx.h
+END
+UserPermDlg.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/UserPermDlg.h
+END
+ServerGeneralPage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/pcmanftpd/!svn/ver/1/src/ServerGeneralPage.cpp
+END
+FilePermMap.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/pcmanftpd/!svn/ver/1/src/FilePermMap.cpp
+END
+ServerIPFilterPage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/pcmanftpd/!svn/ver/1/src/ServerIPFilterPage.cpp
+END
+PCManFTPD2.dsp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.dsp
+END
+ServerThread.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/ServerThread.h
+END
+PCManFTPD2.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.h
+END
+DlgLayout.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/DlgLayout.cpp
+END
+Splitter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/Splitter.cpp
+END
+PCManFTPD2.dsw
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.dsw
+END
+UserGeneralPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcmanftpd/!svn/ver/1/src/UserGeneralPage.h
+END
+IniFile.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/IniFile.cpp
+END
+USERICON.ICO
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/USERICON.ICO
+END
+FtpFilePerm.h
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/FtpFilePerm.h
+END
+FtpDataCon.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/FtpDataCon.cpp
+END
+FtpUserEx.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/FtpUserEx.cpp
+END
+StdAfx.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/StdAfx.cpp
+END
+UserPermDlg.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/pcmanftpd/!svn/ver/1/src/UserPermDlg.cpp
+END
+InputDlg.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/InputDlg.h
+END
+FtpUser.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/FtpUser.h
+END
+UserDialog.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/UserDialog.cpp
+END
+Sock.h
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/pcmanftpd/!svn/ver/1/src/Sock.h
+END
+AppConfig.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/AppConfig.cpp
+END
+ServerIPFilterPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/pcmanftpd/!svn/ver/1/src/ServerIPFilterPage.h
+END
+PropertySheetCtrl.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcmanftpd/!svn/ver/1/src/PropertySheetCtrl.h
+END
+DlgLayout.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/DlgLayout.h
+END
+UserGeneralPage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcmanftpd/!svn/ver/1/src/UserGeneralPage.cpp
+END
+ServerMsgPage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcmanftpd/!svn/ver/1/src/ServerMsgPage.cpp
+END
+Splitter.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/Splitter.h
+END
+LogView.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/LogView.cpp
+END
+FtpFilePerm.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/pcmanftpd/!svn/ver/1/src/FtpFilePerm.cpp
+END
+FtpCmdCon.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/FtpCmdCon.h
+END
+ICO00001.ICO
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/ICO00001.ICO
+END
+mbstring.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/mbstring.h
+END
+Resource.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/Resource.h
+END
+Sock.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/pcmanftpd/!svn/ver/1/src/Sock.cpp
+END
+UserDialog.h
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/UserDialog.h
+END
+ModalFrm.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/ModalFrm.h
+END
+LogViewer.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/LogViewer.h
+END
+ServerLogPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/pcmanftpd/!svn/ver/1/src/ServerLogPage.h
+END
+AppConfig.h
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcmanftpd/!svn/ver/1/src/AppConfig.h
+END
+FtpCmdCon.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/FtpCmdCon.cpp
+END
+FtpSock.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/FtpSock.h
+END
+ServerMsgPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/pcmanftpd/!svn/ver/1/src/ServerMsgPage.h
+END
+PCManFTPD2.rc
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.rc
+END
+FtpServer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/FtpServer.cpp
+END
+LogView.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/LogView.h
+END
+BrowseDialog.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/BrowseDialog.h
+END
+LogEdit.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/LogEdit.h
+END
+TrayIcon.h
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcmanftpd/!svn/ver/1/src/TrayIcon.h
+END
+ServerThread.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/pcmanftpd/!svn/ver/1/src/ServerThread.cpp
+END
+PCManFTPD2.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.cpp
+END
+MainFrm.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/MainFrm.h
+END
+PCManFTPD2.clw
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcmanftpd/!svn/ver/1/src/PCManFTPD2.clw
+END
+ModalFrm.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcmanftpd/!svn/ver/1/src/ModalFrm.cpp
+END
+ICON1.ICO
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/pcmanftpd/!svn/ver/1/src/ICON1.ICO
+END
+LogViewer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcmanftpd/!svn/ver/1/src/LogViewer.cpp
+END
+ServerLogPage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcmanftpd/!svn/ver/1/src/ServerLogPage.cpp
+END

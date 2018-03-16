@@ -1,0 +1,992 @@
+// PermDlg.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "UserPermDlg.h"
+#include "UserDialog.h"
+#include "BrowseDialog.h"
+#include "InputDlg.h"
+
+#include <mbstring.h>
+#include "mbstring.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CUserPermDlg dialog
+
+
+CUserPermDlg::CUserPermDlg(CWnd* pParent, CFtpUser* pUser)
+	: CDialog(CUserPermDlg::IDD, pParent), m_pUser(pUser), m_pCurPerm(NULL)
+{
+	SHFILEINFO shinf;
+	shinf.dwAttributes = SFGAO_FOLDER|SFGAO_FILESYSTEM|SFGAO_BROWSABLE ;
+//	HIMAGELIST himg = (HIMAGELIST)SHGetFileInfo(NULL,0,&shinf,sizeof(shinf),SHGFI_SYSICONINDEX|SHGFI_SMALLICON|SHGFI_USEFILEATTRIBUTES );
+	HIMAGELIST himg = (HIMAGELIST)SHGetFileInfo(AppPath,0,&shinf,sizeof(shinf),SHGFI_SYSICONINDEX|SHGFI_SMALLICON );
+	m_Img.Attach(himg);
+	m_iFolderImg = shinf.iIcon;
+//	shinf.iIcon = -1;
+//	HICON hicon = (HICON)SHGetFileInfo(AppPath,0,&shinf,sizeof(shinf),SHGFI_ICON|SHGFI_LINKOVERLAY|SHGFI_SMALLICON );
+//	int cnt = ImageList_GetImageCount(himg);
+//	m_iFolderLnkImg = ImageList_AddIcon( himg, hicon );
+
+/*	if( !m_pUser->m_pParent && m_pUser->m_FilePerm.GetCount() == 0 )
+	{
+		CFtpFilePerm Perm("/","");
+		Perm.m_IsUser = m_pUser->m_IsUser;
+		m_pUser->m_FilePerm.AddTail(Perm);
+	}
+*/
+
+	//{{AFX_DATA_INIT(CUserPermDlg)
+		// NOTE: the ClassWizard will add member initialization here
+	//}}AFX_DATA_INIT
+}
+
+
+void CUserPermDlg::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CUserPermDlg)
+	DDX_Control(pDX, IDC_FILELIST, m_FileList);
+	DDX_Control(pDX, IDC_DIRTREE, m_DirTree);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CUserPermDlg, CDialog)
+	//{{AFX_MSG_MAP(CUserPermDlg)
+	ON_BN_CLICKED(IDC_ADDDIR, OnAddDir)
+	ON_BN_CLICKED(IDC_ADDVDIR, OnAddVDir)
+	ON_BN_CLICKED(IDC_ADDFILE, OnAddFile)
+	ON_BN_CLICKED(IDC_REMOVE, OnRemove)
+	ON_NOTIFY(TVN_SELCHANGED, IDC_DIRTREE, OnSelchangedDirTree)
+	ON_WM_SIZE()
+	ON_WM_GETMINMAXINFO()
+	ON_NOTIFY(TVN_ITEMEXPANDING, IDC_DIRTREE, OnItemExpandingDirTree)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_FILELIST, OnSelChangedFileList)
+	ON_BN_CLICKED(IDC_INHERIT, OnInheritChange)
+	ON_NOTIFY(NM_DBLCLK, IDC_FILELIST, OnDblclkFileList)
+	ON_BN_CLICKED(IDC_RENAME, OnRename)
+	ON_BN_CLICKED(IDC_MODIFY_PATH, OnModifyPath)
+	ON_WM_DROPFILES()
+	ON_NOTIFY(LVN_KEYDOWN, IDC_FILELIST, OnKeydownFilelist)
+	ON_BN_CLICKED(IDC_READ, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_WRITE, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_DEL, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_APPEND, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_LIST, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_MKDIR, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_RMDIR, UpdateChecksValue)
+	ON_BN_CLICKED(IDC_SUBDIR, UpdateChecksValue)
+	ON_NOTIFY(NM_CLICK, IDC_DIRTREE, OnClickDirTree)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CUserPermDlg message handlers
+
+DLGLAYOUT CUserPermDlg::m_DlgLayoutData[]={
+	{IDC_SPLITTER,		DLA_ALL				},
+
+	{IDC_ADDDIR,		DLA_RIGHT|DLA_TOP	},
+	{IDC_ADDVDIR,		DLA_RIGHT|DLA_TOP	},
+	{IDC_ADDFILE,		DLA_RIGHT|DLA_TOP	},
+	{IDC_RENAME,		DLA_RIGHT|DLA_TOP	},
+	{IDC_REMOVE,		DLA_RIGHT|DLA_TOP	},
+
+	{IDC_PERM_GROUP,	DLA_RIGHT|DLA_TOP	},
+	{IDC_INHERIT,		DLA_RIGHT|DLA_TOP	},
+	{IDC_READ,			DLA_RIGHT|DLA_TOP	},
+	{IDC_WRITE,			DLA_RIGHT|DLA_TOP	},
+	{IDC_DEL,			DLA_RIGHT|DLA_TOP	},
+	{IDC_APPEND,		DLA_RIGHT|DLA_TOP	},
+	{IDC_LIST,			DLA_RIGHT|DLA_TOP	},
+	{IDC_MKDIR,			DLA_RIGHT|DLA_TOP	},
+	{IDC_RMDIR,			DLA_RIGHT|DLA_TOP	},
+	{IDC_SUBDIR,		DLA_RIGHT|DLA_TOP	},
+
+	{IDOK,				DLA_RIGHT|DLA_BOTTOM},
+	{IDCANCEL,			DLA_RIGHT|DLA_BOTTOM},
+
+	{IDC_MODIFY_PATH,		DLA_RIGHT|DLA_BOTTOM},
+	{IDC_DISPPATHSTATIC,DLA_LEFT|DLA_BOTTOM	},
+	{IDC_DISPPATH,		DLA_LEFT|DLA_RIGHT|DLA_BOTTOM},
+	{IDC_REALPATHSTATIC,DLA_LEFT|DLA_BOTTOM	},
+	{IDC_REALPATH,		DLA_LEFT|DLA_RIGHT|DLA_BOTTOM}
+};
+
+BOOL CUserPermDlg::OnInitDialog() 
+{
+	CDialog::OnInitDialog();
+	SetIcon(::LoadIcon( AfxGetInstanceHandle(), LPCTSTR(IDR_MAIN)), TRUE);
+	SetIcon(::LoadIcon( AfxGetInstanceHandle(), LPCTSTR(IDR_MAIN)), FALSE);
+
+	CRect rc;
+	HWND hSplitter = ::GetDlgItem(m_hWnd,IDC_SPLITTER);
+	::GetWindowRect(hSplitter,rc);
+	ScreenToClient(rc);
+	::DestroyWindow(hSplitter);
+	ListView_SetExtendedListViewStyle(m_FileList.m_hWnd,LVS_EX_FULLROWSELECT);
+	CString str;	str.LoadString(IDS_DISPFILE_NAME);
+	m_FileList.InsertColumn(0,str,LVCFMT_LEFT,240);
+//	str.LoadString(IDS_FILE_SIZE);
+//	m_FileList.InsertColumn(1,str,LVCFMT_LEFT,100);
+
+	m_DlgLayout.Load(m_hWnd, m_DlgLayoutData,sizeof(m_DlgLayoutData)/sizeof(DLGLAYOUT));
+
+	m_DirTree.SetImageList(&m_Img,TVSIL_NORMAL);
+	m_FileList.SetImageList(&m_Img,LVSIL_SMALL);
+
+	if( !m_Splitter.Create(this,&m_DirTree,&m_FileList,180) )
+		return -1;
+
+	m_Splitter.MoveWindow(rc);
+	m_Splitter.SetDlgCtrlID(IDC_SPLITTER);
+
+	CFtpFilePerm* pPerm = m_pUser->QueryPerm("/");
+	TVINSERTSTRUCT item;
+	item.hParent=TVI_ROOT;
+	item.hInsertAfter=TVI_LAST;
+	item.item.pszText = "/";
+	item.item.mask=TVIF_TEXT|TVIF_CHILDREN|TVIF_IMAGE|TVIF_PARAM|TVIF_SELECTEDIMAGE;
+	item.item.iImage=m_iFolderImg;
+	item.item.iSelectedImage=m_iFolderImg;
+	item.item.cChildren=1;
+	item.item.lParam=LPARAM(pPerm);
+	item.item.state=0;
+	item.item.stateMask=0;
+
+	HTREEITEM hItem = m_DirTree.InsertItem(&item);
+	m_DirTree.SelectItem(hItem);
+	m_DirTree.Expand(hItem,TVE_EXPAND);
+
+	return TRUE;
+}
+
+
+void CUserPermDlg::OnSelchangedDirTree(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
+	m_FileList.ShowWindow(SW_HIDE);
+	m_FileList.DeleteAllItems();
+	OnSelChanged();
+	EnumDirFiles(m_CurPath, OnEnumFileList, FALSE);
+	m_FileList.ShowWindow(SW_SHOW);
+//	m_FileList.SetFocus();
+	*pResult = 0;
+}
+
+void CUserPermDlg::OnSize(UINT nType, int cx, int cy) 
+{
+	CDialog::OnSize(nType, cx, cy);
+	m_DlgLayout.OnSize(nType, cx, cy);
+}
+
+void CUserPermDlg::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI) 
+{	
+	m_DlgLayout.OnGetMinMaxInfo(lpMMI);
+}
+
+void CUserPermDlg::OnAddDir() 
+{
+	CBrowseDialog dlg(this,NULL);
+	if( dlg.DoModal() == IDOK )
+	{
+		CString RealPath=dlg.GetPath();
+		char* pRealPath=(char*)LPCTSTR(RealPath);
+		CString FileName=GetFileName(RealPath,'\\');
+		AddItem( RealPath, FileName);
+	}
+}
+
+void CUserPermDlg::OnAddVDir() 
+{
+//	CString Name;	Name.LoadString(IDS_VIRTUAL_FOLDER);
+	CInputDlg dlg;
+	dlg.m_Text.LoadString(IDS_NEW_FOLDER);
+	if( dlg.DoModal() != IDOK || dlg.m_Text.IsEmpty())
+		return;
+	AddItem( CString(""), dlg.m_Text );
+}
+
+void CUserPermDlg::OnAddFile() 
+{
+	CFileDialog dlg(TRUE);
+	if( dlg.DoModal() == IDOK )
+	{
+		CString RealPath=dlg.GetPathName();
+		AddItem( RealPath, dlg.GetFileName() );
+	}
+}
+
+void CUserPermDlg::OnRemove() 
+{
+	if( AfxMessageBox(IDS_QUERYDEL,MB_OKCANCEL|MB_ICONQUESTION,-1) != IDOK )
+		return;
+
+	DWORD attrib;
+	BOOL IsDir = m_pCurPerm->m_RealPath.IsEmpty()
+		|| ( (attrib=GetFileAttributes(m_pCurPerm->m_RealPath))!=0xFFFFFFFF && attrib & FILE_ATTRIBUTE_DIRECTORY);
+
+	CFilePermMap& perm_map = m_pUser->GetFilePerm();
+	perm_map.Remove(m_pCurPerm);
+	POSITION pos = perm_map.GetStartPosition();
+	CFtpFilePerm* del_perm_it = NULL;
+	while( pos )
+	{
+		if( del_perm_it )
+		{
+			perm_map.Remove(del_perm_it);
+			del_perm_it = NULL;
+		}
+		CFtpFilePerm* perm_it;
+		CString virt_path_it;
+		perm_map.GetNextAssoc( pos, virt_path_it, (void*&)perm_it );
+		if( 0 == strncmp( m_CurPath, virt_path_it, m_CurPath.GetLength()) && '/' == virt_path_it[m_CurPath.GetLength()] )
+			del_perm_it = perm_it;
+	}
+	if( del_perm_it )
+		perm_map.Remove(del_perm_it);
+
+	int list_sel = m_ListSel;
+	if( m_ListSel >=0 )
+	{
+		LVITEM item;	item.iItem = m_ListSel;	item.mask = LVIF_IMAGE;	item.iSubItem = 0;
+		m_FileList.GetItem(&item);
+
+		if( IsDir )
+		{
+			m_DirTree.Expand(m_TreeSel, TVE_EXPAND);
+			HTREEITEM hItem = FindTreeItem( m_TreeSel, m_VirtName );
+			if(hItem)
+				m_DirTree.DeleteItem(hItem);	//Tree SelChanged
+		}
+		m_FileList.DeleteItem(m_ListSel);
+	}
+	else
+		m_DirTree.DeleteItem(m_TreeSel);
+
+	if( list_sel >= m_FileList.GetItemCount() )
+		list_sel--;
+	if( list_sel >= 0 )
+	{
+		m_FileList.SetItemState(list_sel, TVIS_SELECTED, TVIS_SELECTED);
+		m_FileList.EnsureVisible(list_sel, FALSE);
+	}
+}
+
+CString CUserPermDlg::GetListItemPath(int idx)
+{
+	HTREEITEM hItem = m_DirTree.GetSelectedItem();
+	CString Path = GetTreeItemPath(hItem);
+	if( !Path.IsEmpty() && mbslastchr(Path) != '/' )
+		Path += '/';
+
+	Path += m_FileList.GetItemText(idx,0);
+	return Path;
+}
+
+CString CUserPermDlg::GetTreeItemPath(HTREEITEM item)
+{
+	char path[_MAX_PATH+1];
+	char* pbuf=path+_MAX_PATH;
+	*pbuf=0;
+	CString text;
+	for( ; item ; item = m_DirTree.GetParentItem(item) )
+	{
+		text=m_DirTree.GetItemText(item);
+
+		char* pbuf2=pbuf-(text.GetLength()+1);
+		strcpy(pbuf2,text);
+
+		if(*pbuf)
+			*(pbuf-1)='/';
+		pbuf=pbuf2;
+	}
+	path[_MAX_PATH-1]=0;
+	if(pbuf[1]==0)
+		pbuf--;
+	return CString(pbuf+1);
+}
+
+void CUserPermDlg::AddItem(CString RealPath, CString FileName)
+{
+	CString CurPath = GetTreeItemPath(m_TreeSel);
+	if( mbslastchr(CurPath) != '/' )
+		CurPath += '/';
+
+	CString virt_path = CurPath;
+	virt_path += FileName;
+
+//	CFtpFilePerm* perm = m_pUser->QueryPerm(m_CurPath);
+//	CString real_path = m_pUser->GetRealPath( perm, m_CurPath );
+
+	CFtpFilePerm* perm = m_pUser->QueryPerm(virt_path);
+
+	while( m_pUser->IsPathExist( perm, virt_path, true ) )
+	{
+		// File already exists.
+		CString file_already_exists;
+		file_already_exists.LoadString(IDS_FILE_ALREADY_EXISTS);
+		CInputDlg dlg(this, file_already_exists);
+		dlg.m_Text = FileName;
+		if( dlg.DoModal() == IDCANCEL || dlg.m_Text.IsEmpty() )
+			return;
+		FileName = dlg.m_Text;
+		virt_path = CurPath;
+		virt_path += FileName;
+		perm = m_pUser->QueryPerm(virt_path);
+	}
+
+	m_pCurPerm = new CFtpFilePerm( virt_path, RealPath, perm->m_Perm );
+	m_pUser->GetFilePerm() [ virt_path ] = m_pCurPerm;
+
+	SHFILEINFO shinf;
+	memset(&shinf,0,sizeof(shinf));
+	shinf.iIcon=m_iFolderImg;
+	if( !RealPath.IsEmpty() )
+		SHGetFileInfo(RealPath,0,&shinf,sizeof(shinf),SHGFI_SYSICONINDEX);
+
+	DWORD attrib;
+	BOOL IsDir = RealPath.IsEmpty()
+		|| ( (attrib=GetFileAttributes(RealPath))!=0xFFFFFFFF && attrib & FILE_ATTRIBUTE_DIRECTORY);
+	if(IsDir)
+	{
+		if( m_DirTree.GetChildItem(m_TreeSel) )
+		{
+			HTREEITEM hItem = m_DirTree.InsertItem(TVIF_IMAGE|TVIF_PARAM|TVIF_TEXT|TVIF_SELECTEDIMAGE ,
+				FileName,shinf.iIcon,shinf.iIcon,0,0,0,	m_TreeSel, TVI_LAST );
+			UpdateDirContent(hItem);
+		}
+		else
+		{
+			CurPath = GetTreeItemPath(m_TreeSel);
+			int Count = EnumDirFiles( CurPath,NULL,TRUE);
+			TVITEM item;
+			item.hItem = m_TreeSel;
+			item.mask = TVIF_CHILDREN;
+			item.cChildren = Count;
+			m_DirTree.SetItem(&item);
+		}
+		m_DirTree.Expand(m_TreeSel,TVE_EXPAND);
+	}
+	m_ListSel = m_FileList.InsertItem(0,FileName,shinf.iIcon);
+	m_FileList.SetItemState(m_ListSel, TVIS_SELECTED, TVIS_SELECTED);
+	m_FileList.EnsureVisible(m_ListSel, FALSE);
+	OnSelChanged();
+	m_FileList.SetFocus();
+}
+
+CString CUserPermDlg::GetFileName( CString Path, char sep)
+{
+	char *pPath = (char*)LPCTSTR(Path);
+	const char* pFileName = (const char*)_mbsrchr(LPBYTE(pPath),sep);
+	if(pFileName  && sep=='\\' && !pFileName[1] )	//	if it's a drive like "C:\"
+		return Path.Left(Path.GetLength()-2);
+	if( 0 == strcmp(pFileName,"/") )
+		pFileName--;
+	return CString(pFileName+1);
+}
+
+
+void CUserPermDlg::EnableEdit(BOOL bEnable)
+{
+//	((CEdit*)GetDlgItem(IDC_FileName))->SetReadOnly(!bEnable);
+//	((CEdit*)GetDlgItem(IDC_REALPATH))->SetReadOnly(!bEnable);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_MODIFY_PATH), bEnable);
+}
+
+void CUserPermDlg::UpdateChecksValue()
+{
+	if(!m_pCurPerm)
+		return;
+
+	m_pCurPerm->m_CanList		=IsDlgButtonChecked( IDC_LIST	);
+	m_pCurPerm->m_CanMkDir		=IsDlgButtonChecked( IDC_MKDIR	);
+	m_pCurPerm->m_CanRead		=IsDlgButtonChecked( IDC_READ	);
+	m_pCurPerm->m_CanRmDir		=IsDlgButtonChecked( IDC_RMDIR	);
+	m_pCurPerm->m_CanSubDir	=IsDlgButtonChecked( IDC_SUBDIR	);
+	m_pCurPerm->m_CanWrite		=IsDlgButtonChecked( IDC_WRITE	);
+	m_pCurPerm->m_CanDelete	=IsDlgButtonChecked( IDC_DEL	);
+	m_pCurPerm->m_CanAppend	=IsDlgButtonChecked( IDC_APPEND	);
+
+}
+
+void CUserPermDlg::UpdateChecksDisplay()
+{
+	bool canChangeInherit = ( m_CurPath != "/" );
+	bool canWrite = true;
+	if( canChangeInherit )
+	{
+		if( m_pCurPerm->m_VirtPath == m_CurPath )
+		{
+//			canWrite = !m_pCurPerm->m_RealPath.IsEmpty();
+
+			if( m_pUser->m_pParent )
+			{
+				CFtpFilePerm *perm =  m_pUser->m_pParent->QueryPerm(m_CurPath);
+				if( perm->m_VirtPath == m_CurPath )
+				{
+//					canChangeInherit = true;
+				}
+				else
+				{
+					// Check if it's inherited from parent path.
+					CString parent_virt_path = CFtpFilePerm::GetParentPath( m_CurPath );
+					CString parent_real_path = m_pUser->GetRealPath(parent_virt_path);
+					CString real_file_path = parent_real_path ;
+					if( mbslastchr(real_file_path) != '\\' )
+						real_file_path += '\\';
+					real_file_path += GetFileName(m_CurPath, '/');
+					if( m_pCurPerm->m_RealPath.CompareNoCase(real_file_path))
+						canChangeInherit = false;
+				}
+			}
+			else// if( m_pCurPerm->m_RealPath.IsEmpty() )	// it's inherited from parent group
+			{
+					// Check if it's inherited from parent path.
+					CString parent_virt_path = CFtpFilePerm::GetParentPath( m_CurPath );
+					CString parent_real_path = m_pUser->GetRealPath(parent_virt_path);
+					CString real_file_path = parent_real_path ;
+					if( mbslastchr(real_file_path) != '\\' )
+						real_file_path += '\\';
+					real_file_path += GetFileName(m_CurPath, '/');
+					if( m_pCurPerm->m_RealPath.IsEmpty() || m_pCurPerm->m_RealPath.CompareNoCase(real_file_path))
+						canChangeInherit = false;
+
+//				canChangeInherit = false;
+			}
+		}
+	}
+
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_INHERIT),canChangeInherit);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_LIST),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_MKDIR),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_READ),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_RMDIR),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_SUBDIR),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_WRITE),!m_IsCurPermInherited && canWrite);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_DEL),!m_IsCurPermInherited);
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_APPEND),!m_IsCurPermInherited);
+
+	CheckDlgButton( IDC_INHERIT,	m_IsCurPermInherited	);
+	if( m_pCurPerm )
+	{
+		CheckDlgButton( IDC_LIST,	m_pCurPerm->m_CanList		);
+		CheckDlgButton( IDC_MKDIR,	m_pCurPerm->m_CanMkDir	);
+		CheckDlgButton( IDC_READ,	m_pCurPerm->m_CanRead		);
+		CheckDlgButton( IDC_RMDIR,	m_pCurPerm->m_CanRmDir	);
+		CheckDlgButton( IDC_SUBDIR,	m_pCurPerm->m_CanSubDir	);
+		CheckDlgButton( IDC_WRITE,	m_pCurPerm->m_CanWrite	);
+		CheckDlgButton( IDC_DEL,	m_pCurPerm->m_CanDelete	);
+		CheckDlgButton( IDC_APPEND,	m_pCurPerm->m_CanAppend	);
+	}
+	else
+	{
+		CheckDlgButton( IDC_LIST,	FALSE);
+		CheckDlgButton( IDC_MKDIR,	FALSE);
+		CheckDlgButton( IDC_READ,	FALSE);
+		CheckDlgButton( IDC_RMDIR,	FALSE);
+		CheckDlgButton( IDC_SUBDIR,	FALSE);
+		CheckDlgButton( IDC_WRITE,	FALSE);
+		CheckDlgButton( IDC_DEL,	FALSE);
+		CheckDlgButton( IDC_APPEND,	FALSE);
+	}
+}
+
+CUserPermDlg::~CUserPermDlg()
+{
+	m_Img.Detach();
+}
+
+void CUserPermDlg::OnItemExpandingDirTree(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	NM_TREEVIEW& nmTree = *(NM_TREEVIEW*)pNMHDR;
+	HTREEITEM hItem = nmTree.itemNew.hItem;
+	UpdateDirContent(hItem);
+	*pResult = 0;
+}
+
+
+
+/*	This funciton is used to enumerate the files in the directory
+	specified in DirPath and return the number of files.
+	If bDirOnly is TRUE, enumerates sub directories only.
+	Perm info and paths of each file are passed into EnumProc.
+	When EnumProc is NULL, return 1 if the directory is not empty, and vice versa.
+*/
+
+int CUserPermDlg::EnumDirFiles( CString virt_path, ENUMDIR_PROC EnumProc, BOOL bDirOnly )
+{
+	int Count=0;
+//	SYSTEMTIME curtime;
+//	GetLocalTime(&curtime);
+	WIN32_FIND_DATA find;
+	HANDLE finder = INVALID_HANDLE_VALUE;
+
+	CFtpUser* pUser[]  = {m_pUser, m_pUser->m_pParent};
+	for( int i=0; i < 2; ++i)
+	{
+		if( !pUser[i] )
+			continue;
+
+		CString virt_path_it;
+		POSITION pos = pUser[i]->GetFilePerm().GetStartPosition();
+		while( pos )
+		{
+			CFtpFilePerm* perm_it;
+			pUser[i]->GetFilePerm().GetNextAssoc( pos, virt_path_it, (void*&)perm_it );
+
+			if( virt_path.GetLength() != virt_path_it.GetLength() 
+				&& 0 == strncmp( virt_path, virt_path_it, virt_path.GetLength() )
+				&& ( virt_path.GetLength() ==1 || virt_path_it[virt_path.GetLength()] == '/' ) )
+			{
+				CFtpFilePerm* tmp_perm;
+				if( i == 1 && pUser[0]->GetFilePerm().Lookup(virt_path_it, (void*&)tmp_perm) )
+					continue;
+
+				DWORD attrib;
+				bool is_dir = (perm_it->m_RealPath.IsEmpty() 
+					|| ( (attrib=GetFileAttributes(perm_it->m_RealPath))!=0xFFFFFFFF && (attrib&FILE_ATTRIBUTE_DIRECTORY) ) );	//如果檔案存在，並且是目錄
+
+				if( bDirOnly && !is_dir )
+					continue;
+
+				if( !EnumProc )
+					return 1;
+
+				int i_name = virt_path.GetLength();
+				if( i_name > 1 )	i_name++;
+				const char* psep = (const char*)_mbschr(LPBYTE(LPCTSTR(virt_path_it) + i_name), '/');
+				if( psep )
+					continue;
+				CString name = virt_path_it.Mid( i_name, virt_path_it.GetLength()-i_name);
+
+				Count++;
+				if( !EnumProc )
+					return 1;
+				(this->*EnumProc)( name, virt_path_it, perm_it->m_RealPath );
+			}
+		}
+	}
+
+	CString real_path = m_pUser->GetRealPath( virt_path );
+	if( real_path.IsEmpty() )
+		return Count;
+
+	if( mbslastchr(real_path) != '\\' )
+		real_path += '\\';
+
+	// List all the file in the real dir.
+	finder = FindFirstFile( real_path + '*', &find );
+	if( finder == INVALID_HANDLE_VALUE )
+	{
+		FindClose(finder);
+		return Count;
+	}
+	if( mbslastchr(virt_path) != '/' )
+		virt_path += '/';
+	do
+	{
+		if( '.' == *find.cFileName )
+			continue;
+
+		CString vfpath = virt_path + find.cFileName;
+		CFtpFilePerm* perm = m_pUser->QueryPerm( vfpath );
+		if( perm->m_VirtPath == vfpath )
+			continue;
+
+		if( bDirOnly && !(find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
+			continue;
+
+		if( !EnumProc )
+			return 1;
+		Count++;
+		(this->*EnumProc)( find.cFileName, vfpath, real_path + find.cFileName );
+
+	}while( FindNextFile(finder, &find) );
+	FindClose(finder);
+
+	return Count;
+}
+
+
+void CUserPermDlg::OnExpandEnumSubDir( CString Name, CString VirtPath, CString RealPath)
+{
+	SHFILEINFO shinf;
+	SHGetFileInfo(RealPath,0,&shinf,sizeof(shinf),SHGFI_SYSICONINDEX|SHGFI_SMALLICON );
+	HTREEITEM hItem = m_DirTree.InsertItem( Name, shinf.iIcon, shinf.iIcon,m_EnumParent);
+	int Count = EnumDirFiles( VirtPath,NULL,TRUE);
+//	if( !RealPath.IsEmpty() )
+//	{
+		TVITEM item;
+		item.hItem=hItem;
+		item.mask=TVIF_CHILDREN;
+		item.cChildren = Count;
+		m_DirTree.SetItem(&item);
+//	}
+}
+
+
+void CUserPermDlg::OnEnumFileList( CString Name, CString VirtPath, CString RealPath)
+{
+	SHFILEINFO shinf;
+	SHGetFileInfo(RealPath,0,&shinf,sizeof(shinf),SHGFI_SYSICONINDEX|SHGFI_SMALLICON );
+	m_FileList.InsertItem( 0, Name, shinf.iIcon );
+}
+
+void CUserPermDlg::OnSelChangedFileList(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+	OnSelChanged();
+	*pResult = 0;
+}
+
+void CUserPermDlg::OnInheritChange() 
+{
+	if( IsDlgButtonChecked(IDC_INHERIT))
+	{
+		if( m_pCurPerm && m_pCurPerm->m_VirtPath == m_CurPath )
+			m_pUser->GetFilePerm().Remove(m_pCurPerm);
+		m_pCurPerm = m_pUser->QueryPerm(m_CurPath);
+		m_IsCurPermInherited = true;
+	}
+	else
+	{
+		CString RealPath = m_pUser->GetRealPath(m_CurPath);
+		m_pCurPerm = new CFtpFilePerm( m_CurPath, RealPath, m_pCurPerm->m_Perm);
+		m_pUser->GetFilePerm() [m_CurPath] = m_pCurPerm;
+		m_IsCurPermInherited = false;
+	}
+	UpdateChecksDisplay();
+	UpdateBtns();
+}
+
+void CUserPermDlg::OnDblclkFileList(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	m_ListSel = int(m_FileList.GetFirstSelectedItemPosition())-1;
+	if( m_ListSel >=0 )
+	{
+		CString path = GetListItemPath(m_ListSel);
+		path = m_pUser->GetRealPath(path);
+		DWORD attrib;
+		BOOL IsDir = path.IsEmpty()
+			|| ( (attrib=GetFileAttributes(path))!=0xFFFFFFFF && attrib & FILE_ATTRIBUTE_DIRECTORY);
+
+		LVITEM item;	item.iItem = m_ListSel;	item.mask = LVIF_IMAGE;	item.iSubItem = 0;
+		m_FileList.GetItem(&item);
+		if( IsDir )
+		{
+			m_DirTree.Expand(m_TreeSel, TVE_EXPAND);
+			m_VirtName = m_FileList.GetItemText(m_ListSel,0);
+			HTREEITEM hItem = FindTreeItem(m_TreeSel, m_VirtName);
+			if( hItem )
+			{
+				m_FileList.DeleteAllItems();
+				m_DirTree.SelectItem(hItem);
+			}
+		}
+	}
+	*pResult = 0;
+}
+
+
+//DEL void CUserPermDlg::CopyOnWrite(CFtpFilePerm *&ref_pPerm)
+//DEL {
+//DEL 	if( BOOL(ref_pPerm->m_IsUser) != m_pUser->m_IsUser )
+//DEL 	{
+//DEL 		CFtpFilePerm newPerm(ref_pPerm->m_DispPath, ref_pPerm->m_RealPath,
+//DEL 			ref_pPerm->m_Perm);
+//DEL 		newPerm.m_IsUser = m_pUser->m_IsUser;
+//DEL 		POSITION pos = m_pUser->m_FilePerm.AddTail( newPerm );
+//DEL 		CFtpFilePerm& ref_Perm = m_pUser->m_FilePerm.GetAt(pos);
+//DEL 		ref_pPerm = &ref_Perm;
+//DEL 	}
+//DEL }
+
+void CUserPermDlg::OnSelChanged()
+{
+	m_TreeSel = m_DirTree.GetSelectedItem();
+	m_ListSel = int(m_FileList.GetFirstSelectedItemPosition())-1;
+
+	m_CurPath = GetTreeItemPath(m_TreeSel);
+	if( m_ListSel != -1 )
+	{
+		m_VirtName = m_FileList.GetItemText( m_ListSel, 0 );
+		if( mbslastchr(m_CurPath) != '/' )	m_CurPath += '/';
+		m_CurPath += m_VirtName;
+	}
+	else
+		m_VirtName = m_DirTree.GetItemText(m_TreeSel);
+
+	m_pCurPerm = m_pUser->QueryPerm(m_CurPath);
+	m_IsCurPermInherited = (m_pCurPerm->m_VirtPath != m_CurPath) ||
+		(m_pUser->m_pParent && m_pCurPerm == m_pUser->m_pParent->QueryPerm(m_CurPath));
+
+	SetDlgItemText(IDC_REALPATH,m_pUser->GetRealPath(m_CurPath) );
+	SetDlgItemText(IDC_DISPPATH, m_CurPath);
+	UpdateChecksDisplay();
+	UpdateBtns();
+}
+
+HTREEITEM CUserPermDlg::FindTreeItem(HTREEITEM hParent, LPCTSTR Text)
+{
+	HTREEITEM hItem = m_DirTree.GetChildItem(hParent);
+	while( hItem )
+	{
+		if(m_DirTree.GetItemText(hItem) == Text )
+			break;
+		hItem = m_DirTree.GetNextSiblingItem(hItem);
+	}
+	return hItem;
+}
+
+void CUserPermDlg::OnRename() 
+{
+	CInputDlg dlg;
+	dlg.m_Text = m_VirtName;
+
+	CString CurPath = CFtpFilePerm::GetParentPath( m_CurPath );
+	if( mbslastchr(CurPath) != '/' )
+		CurPath += '/';
+
+	CString virt_path = CurPath;
+
+	if( dlg.DoModal() == IDCANCEL || dlg.m_Text.IsEmpty() )
+		return;
+	virt_path += dlg.m_Text;
+
+	CString file_already_exists;
+	file_already_exists.LoadString(IDS_FILE_ALREADY_EXISTS);
+
+	CFtpFilePerm* perm = m_pUser->QueryPerm(virt_path);
+	while( m_pUser->IsPathExist( m_pCurPerm, virt_path, true ) )	// File already exists.
+	{
+		dlg.m_Title = file_already_exists;
+		if( dlg.DoModal() == IDCANCEL || dlg.m_Text.IsEmpty() )
+			return;
+		virt_path = CurPath;
+		virt_path += dlg.m_Text;
+		perm = m_pUser->QueryPerm(virt_path);
+	}
+
+	CFilePermMap& perm_map = m_pUser->GetFilePerm();
+	perm_map.Remove(m_pCurPerm);
+	POSITION pos = perm_map.GetStartPosition();
+	CFtpFilePerm* ren_perm_it = NULL;
+	while( pos )
+	{
+		if( ren_perm_it )
+		{
+			perm_map.RemoveKey(ren_perm_it->m_VirtPath);
+			ren_perm_it->m_VirtPath = virt_path + ren_perm_it->m_VirtPath.Mid(m_CurPath.GetLength());
+			perm_map[ ren_perm_it->m_VirtPath ] = ren_perm_it;
+			ren_perm_it = NULL;
+		}
+		CFtpFilePerm* perm_it;
+		CString virt_path_it;
+		perm_map.GetNextAssoc( pos, virt_path_it, (void*&)perm_it );
+		if( 0 == strncmp( m_CurPath, virt_path_it, m_CurPath.GetLength()) && '/' == virt_path_it[m_CurPath.GetLength()] )
+			ren_perm_it = perm_it;
+	}
+	if( ren_perm_it )
+	{
+		perm_map.RemoveKey(ren_perm_it->m_VirtPath);
+		ren_perm_it->m_VirtPath = virt_path + ren_perm_it->m_VirtPath.Mid(m_CurPath.GetLength());
+		perm_map[ ren_perm_it->m_VirtPath ] = ren_perm_it;
+	}
+
+	m_CurPath = CurPath + dlg.m_Text;
+	m_pCurPerm->m_VirtPath = m_CurPath;
+	perm_map[ m_pCurPerm->m_VirtPath ] = m_pCurPerm;
+
+	HTREEITEM hItem = FindTreeItem(m_TreeSel, m_VirtName);
+
+	m_VirtName = dlg.m_Text;
+
+	if(m_ListSel >= 0)
+	{
+		m_FileList.SetItemText(m_ListSel, 0, m_VirtName);
+		m_DirTree.Expand(m_TreeSel,TVE_EXPAND);
+		if(hItem)
+			m_DirTree.SetItemText(hItem, m_VirtName);
+	}
+	else
+		m_DirTree.SetItemText(m_TreeSel, m_VirtName);
+}
+
+void CUserPermDlg::OnModifyPath() 
+{
+	CMenu menu;	menu.LoadMenu(IDR_POPUP);
+	CRect rc;
+	GetDlgItem(IDC_MODIFY_PATH)->GetWindowRect(rc);
+	CMenu *pPopup = menu.GetSubMenu(1);
+	if( m_pCurPerm->m_VirtPath == '/' )
+		pPopup->EnableMenuItem(ID_BROWSE_FILE, MF_GRAYED|MF_BYCOMMAND);
+	UINT id = pPopup->TrackPopupMenu(TPM_LEFTALIGN|TPM_RETURNCMD,rc.left,rc.bottom,this);
+	BOOL bDir = TRUE;
+	switch( id )
+	{
+	case ID_BROWSE_FOLDER:
+		{
+			CBrowseDialog dlg(this,NULL);
+			if( dlg.DoModal() != IDOK )
+				return;
+			m_pCurPerm->m_RealPath = dlg.GetPath();
+			break;
+		}
+	case ID_BROWSE_FILE:
+		{
+			CFileDialog dlg(TRUE);
+			if( dlg.DoModal() != IDOK )
+				return;
+			m_pCurPerm->m_RealPath = dlg.GetPathName();	
+			BOOL bDir = FALSE;
+			break;
+		}
+	case ID_SET_VIRTUAL:
+		m_pCurPerm->m_RealPath.Empty();
+	}
+
+	SHFILEINFO shinf;	memset(&shinf,0,sizeof(shinf));
+	if( m_pCurPerm->m_RealPath.IsEmpty() )
+		shinf.iIcon=m_iFolderImg;
+	else
+		SHGetFileInfo( m_pCurPerm->m_RealPath,0,&shinf,sizeof(shinf),
+			SHGFI_SYSICONINDEX);
+
+	if( m_ListSel >=0 )
+	{
+		LVITEM item;	item.iItem = m_ListSel;
+		item.mask = LVIF_IMAGE;	item.iImage = shinf.iIcon;
+		m_FileList.SetItem( &item );
+		if(bDir)
+		{
+			HTREEITEM hItem = FindTreeItem(m_TreeSel,m_VirtName);
+			m_DirTree.SetItemImage( hItem,shinf.iIcon,shinf.iIcon );
+			UpdateDirContent(hItem);
+		}
+	}
+	else
+	{
+		m_DirTree.SetItemImage( m_TreeSel,shinf.iIcon,shinf.iIcon );
+		UpdateDirContent(m_TreeSel);
+	}
+
+	GetDlgItem(IDC_REALPATH)->SetWindowText(m_pCurPerm->m_RealPath);
+	UpdateChecksDisplay();
+}
+
+
+void CUserPermDlg::UpdateBtns()
+{
+	BOOL bEnableBtns = FALSE;
+	BOOL bEnableRemove = FALSE;
+	BOOL bEnableModify = FALSE;
+	if( m_pCurPerm && m_pCurPerm->m_VirtPath == m_CurPath && !m_IsCurPermInherited )
+	{
+		bEnableModify = TRUE;
+		if( m_CurPath != "/" )
+			bEnableRemove = bEnableBtns = TRUE;
+
+		if( m_pUser->m_pParent && m_pUser->m_pParent->QueryPerm(m_CurPath)->m_VirtPath == m_CurPath )
+			bEnableRemove = FALSE;
+/*		CFtpFilePerm* pParent_Perm = m_pUser->m_pParent ? 
+			m_pUser->m_pParent->QueryPermVirtual(m_CurPath):NULL;
+		if( pParent_Perm && pParent_Perm->m_DispPath == m_CurPath)
+		{
+			bEnableInherit = TRUE;
+		}
+		else
+		{
+			if( m_pCurPerm->m_RealPath.IsEmpty() )
+			{
+				bEnableInherit = FALSE;
+			}
+			else
+			{
+				CString ParentPath;
+				if( m_CurPath != "/" )
+					ParentPath = m_CurPath.Left(m_CurPath.GetLength()-m_VirtPath.GetLength());
+				else
+					ParentPath = m_CurPath;
+				CString RealPath = m_pUser->GetRealPath(ParentPath);
+				if( !RealPath.IsEmpty() && mbslastchr(RealPath) != '\\' )
+					RealPath += char('\\');
+
+				if( m_pCurPerm->m_RealPath.CompareNoCase(RealPath + m_VirtPath) &&
+					BOOL(m_pCurPerm->m_IsUser) == m_pUser->m_IsUser )
+						bEnableInherit = FALSE;
+			}
+		}
+*/
+	}
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_REMOVE), bEnableRemove );
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_RENAME), bEnableBtns );
+	::EnableWindow(::GetDlgItem(m_hWnd,IDC_MODIFY_PATH), bEnableModify );
+}
+
+void CUserPermDlg::UpdateDirContent( HTREEITEM hItem )
+{
+	if(!m_DirTree.GetChildItem(hItem))
+	{
+		CString DispPath = GetTreeItemPath(hItem);
+		if( DispPath.IsEmpty() )	DispPath = "/";
+		m_EnumParent = hItem;
+		EnumDirFiles(DispPath, OnExpandEnumSubDir, TRUE);
+	}
+}
+
+void CUserPermDlg::OnDropFiles(HDROP hDropInfo) 
+{
+//	CPoint pt;
+//	DragQueryPoint( hDropInfo, &pt);
+//	if( ::WindowFromPoint( pt ) == m_FileList.m_hWnd )
+//	{}
+	DWORD c = DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
+	char path[MAX_PATH+1];
+	for( DWORD i = 0; i < c; ++i )
+	{
+		DragQueryFile(hDropInfo, i, path, MAX_PATH);
+		char* psep = (char*)_mbsrchr( (unsigned char*)path, '\\' );
+		char* name = psep ? (psep+1) : path;
+		AddItem( path, name );
+	}
+	DragFinish(hDropInfo);
+}
+
+void CUserPermDlg::OnKeydownFilelist(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	NMLVKEYDOWN* pLVKeyDow = (NMLVKEYDOWN*)pNMHDR;
+	switch( pLVKeyDow->wVKey )
+	{
+	case VK_DELETE:
+		if( ::IsWindowEnabled(::GetDlgItem(m_hWnd, IDC_REMOVE)) )
+			OnRemove();
+		break;
+	case VK_F2:
+		if( ::IsWindowEnabled(::GetDlgItem(m_hWnd, IDC_RENAME)) )
+			OnRename();
+		break;
+	}
+	*pResult = 0;
+}
+
+
+
+void CUserPermDlg::OnClickDirTree(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+	CPoint pt;
+	GetCursorPos( &pt );
+	m_DirTree.ScreenToClient( &pt );
+	UINT flags;
+	m_DirTree.HitTest(pt, &flags);
+	if( flags & TVHT_ONITEM )
+		m_FileList.SetItemState(m_ListSel, 0, TVIS_SELECTED);
+	*pResult = 0;
+}

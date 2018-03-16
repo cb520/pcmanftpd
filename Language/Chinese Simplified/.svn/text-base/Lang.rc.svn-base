@@ -1,0 +1,663 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 251, 125
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About PCMan' FTP Server"
+FONT 9, "宋体"
+BEGIN
+    ICON            IDR_MAIN,IDC_STATIC,11,17,20,20
+    LTEXT           "PCMan's FTP Server 2.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005    2005 年 4 月 13 日发行",
+                    IDC_STATIC,40,25,151,8
+    DEFPUSHBUTTON   "确定 (&O)",IDOK,194,7,50,14,WS_GROUP
+    LTEXT           "本程序由国立阳明大学医学系洪任谕 (PCMan) 撰写于四年级下学期\n\n本程序使用的图标由师大美术系林彦慧 (Party) 同学设计\n\n这是一个免费且完全兼容中文操作系统的 FTP 架站软件",
+                    IDC_STATIC,7,44,237,55,SS_NOPREFIX
+    PUSHBUTTON      "h t t p : / / p c m a n . p t t . c c  /",IDC_WEBSITE,
+                    55,104,140,14
+END
+
+IDD_SERVER_IPFILTER DIALOG DISCARDABLE  0, 0, 247, 169
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "IP 过滤"
+FONT 9, "宋体"
+BEGIN
+    LISTBOX         IDC_ALLOW_LIST,7,18,115,109,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_ALLOW_EDIT,7,129,115,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "新建(&A)",IDC_ADD_ALLOW,7,148,53,14
+    PUSHBUTTON      "删除(&E)",IDC_DEL_ALLOW,65,148,53,14
+    LISTBOX         IDC_BAN_LIST,125,18,115,109,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_BAN_EDIT,125,129,115,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "新建(&D)",IDC_ADD_BAN,129,148,53,14
+    PUSHBUTTON      "删除(&L)",IDC_DEL_BAN,187,148,53,14
+    LTEXT           "禁止连线的 IP 地址",IDC_STATIC,125,7,115,8
+    LTEXT           "允许连线的 IP 地址",IDC_STATIC,7,7,115,8
+END
+
+IDD_SERVER_LOG DIALOG DISCARDABLE  0, 0, 206, 117
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "纪录"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "屏幕上显示连线纪录",IDC_LOGTOSCREEN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,9,88,10
+    LTEXT           "最大行数：",IDC_STATIC,106,10,41,8
+    EDITTEXT        IDC_MAXLINE,153,7,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXLINESPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,188,13,11,14
+    CONTROL         "连线纪录存入文件",IDC_LOGTOFILE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,27,80,10
+    PUSHBUTTON      "查看 (&V)",IDC_VIEWLOG,106,26,46,14
+    PUSHBUTTON      "清除 (&D)",IDC_DELLOG,153,26,46,14,NOT WS_VISIBLE
+    CONTROL         "文件传输纪录存入文件",IDC_LOGTRANSFERTOFILE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,45,96,10
+    PUSHBUTTON      "查看 (&W)",IDC_VIEW_TRANSFERLOG,106,44,46,14
+    PUSHBUTTON      "清除 (&D)",IDC_DELTRANSFERLOG,153,44,46,14,NOT 
+                    WS_VISIBLE
+END
+
+IDD_INPUT DIALOG DISCARDABLE  0, 0, 235, 45
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "输入"
+FONT 9, "宋体"
+BEGIN
+    EDITTEXT        IDC_TEXT,7,24,163,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "确定(&O)",IDOK,178,7,50,14,WS_GROUP
+    PUSHBUTTON      "取消(&C)",IDCANCEL,178,23,50,14,WS_GROUP
+    LTEXT           "请键入显示的文件名：",-1,7,7,163,8,SS_NOPREFIX
+END
+
+IDD_LOG_VIEWER DIALOG DISCARDABLE  0, 0, 468, 330
+STYLE WS_MAXIMIZEBOX | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+CAPTION "文件传输纪录"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "Tab1",IDC_TAB,"SysTabControl32",TCS_HOTTRACK | 
+                    TCS_BUTTONS,0,0,468,15
+    CONTROL         "List1",IDC_UPLOADLIST,"SysListView32",LVS_REPORT | 
+                    LVS_SHAREIMAGELISTS | NOT WS_VISIBLE | WS_BORDER | 
+                    WS_TABSTOP,0,16,468,314
+    CONTROL         "List1",IDC_DOWNLOADLIST,"SysListView32",LVS_REPORT | 
+                    LVS_SHAREIMAGELISTS | WS_BORDER | WS_TABSTOP,0,16,468,
+                    314
+END
+
+IDD_SERVER_GENERAL DIALOG DISCARDABLE  0, 0, 249, 159
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "常规设置"
+FONT 9, "MS Sans Serif"
+BEGIN
+    CONTROL         "Show graphical user interface on startup",
+                    IDC_STARTUP_WITH_GUI,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,9,142,10
+    LTEXT           "端口：",IDC_STATIC,160,10,33,8
+    EDITTEXT        IDC_PORT,196,7,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_PORTSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,231,13,11,
+                    14
+    CONTROL         "Enable PASV (passive mode)",IDC_ENABLE_PASV,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,28,107,10
+    CONTROL         "Diaplay a tray icon inn  task bar",IDC_TRAYICON,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,127,28,115,10
+    LTEXT           "PASV (Passive Mode) 端口范围：",IDC_STATIC,7,48,119,8
+    EDITTEXT        IDC_PASVPORTMIN,127,46,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_PASVPORTMINSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,166,50,11,14
+    EDITTEXT        IDC_PASVPORTMAX,196,46,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_PASVPORTMAXSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,231,53,11,14
+    LTEXT           "到",IDC_STATIC,181,48,8,8
+    EDITTEXT        IDC_MAXCONPERIP,127,64,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXCONPERIPSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,165,74,11,14
+    LTEXT           "同一 IP 地址允许的最大连线数：",IDC_STATIC,7,67,116,8
+    EDITTEXT        IDC_MAXCON,127,83,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXCONSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,165,90,11,
+                    14
+    LTEXT           "Server 最大用户连线数：",IDC_STATIC,7,84,95,8
+    LTEXT           "( 0 表示不限 )",IDC_STATIC,181,67,48,8
+    LTEXT           "( 0 表示不限 )",IDC_STATIC,181,84,48,8
+    EDITTEXT        IDC_MAXTRYPERIP,127,133,46,14,ES_AUTOHSCROLL | ES_NUMBER | 
+                    NOT WS_VISIBLE
+    CONTROL         "Spin1",IDC_MAXTRYPERIPSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS | NOT WS_VISIBLE,165,130,11,14
+    LTEXT           "同一 IP 地址最大错误登录次数：\n( 超过则禁止此 IP 地址连线 )",
+                    IDC_STATIC,7,131,118,17,NOT WS_VISIBLE
+    LTEXT           "( 0 表示不限 )",IDC_STATIC,181,135,48,8,NOT WS_VISIBLE
+    GROUPBOX        "传输总量限制  ( 以 KB / 秒 为单位，0 表示不限 )",
+                    IDC_STATIC,7,101,235,31
+    EDITTEXT        IDC_TOTALMAXUSPEED,74,113,46,14,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXUSPEEDSPIN2,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,114,114,11,14
+    EDITTEXT        IDC_TOTALMAXDSPEED,190,113,46,14,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXDSPEEDSPIN2,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,228,116,11,14
+    LTEXT           "上传流量限制：",IDC_STATIC,14,116,57,8
+    LTEXT           "下载流量限制：",IDC_STATIC,130,116,56,8
+END
+
+IDD_SERVER_MSG DIALOG DISCARDABLE  0, 0, 247, 157
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "欢迎信息"
+FONT 9, "宋体"
+BEGIN
+    LTEXT           "连线时送给用户的欢迎信息",IDC_STATIC,7,7,105,8
+    EDITTEXT        IDC_EDIT,7,21,233,129,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_USER DIALOG DISCARDABLE  0, 0, 262, 193
+STYLE DS_MODALFRAME | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "用户设置"
+FONT 9, "宋体"
+BEGIN
+    PUSHBUTTON      "确定(&O)",IDOK,151,173,50,14
+    PUSHBUTTON      "取消(&C)",IDCANCEL,205,173,50,14
+    CONTROL         "Tree1",IDC_USERLIST,"SysTreeView32",TVS_DISABLEDRAGDROP | 
+                    TVS_SHOWSELALWAYS | TVS_FULLROWSELECT | WS_BORDER | 
+                    WS_TABSTOP,7,7,98,131
+    PUSHBUTTON      "添加用户(&U)",IDC_ADD_USER,7,140,98,14
+    PUSHBUTTON      "新建群组(&G)",IDC_ADD_GROUP,7,156,98,14
+    PUSHBUTTON      "删除(&D)",IDC_DELETE,7,173,98,14
+END
+
+IDD_USER_GENERAL DIALOG DISCARDABLE  0, 0, 298, 223
+STYLE DS_CONTROL | WS_CHILD | WS_CAPTION
+CAPTION "常规设置"
+FONT 9, "宋体"
+BEGIN
+    GROUPBOX        "帐号",IDC_STATIC,7,7,284,52
+    LTEXT           "名称：",IDC_STATIC,27,20,33,8
+    EDITTEXT        IDC_NAME,63,18,87,14,ES_AUTOHSCROLL
+    LTEXT           "群组：",IDC_GROUPSTATIC,160,20,33,8
+    COMBOBOX        IDC_GROUP,195,18,90,131,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_PASSWD,63,38,87,14,ES_PASSWORD | ES_AUTOHSCROLL
+    CONTROL         "开放使用这个帐号",IDC_ENABLED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,155,40,80,10
+    GROUPBOX        "传输速度限制   ( 单位为 KB /  秒，0 表示无限 )",
+                    IDC_STATIC,7,68,284,37
+    EDITTEXT        IDC_MAXUSPEED,83,82,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXUSPEEDSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,124,82,11,14
+    EDITTEXT        IDC_MAXDSPEED,225,82,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXDSPEEDSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,266,84,11,14
+    GROUPBOX        "连线",IDC_STATIC,7,113,284,59
+    EDITTEXT        IDC_MAXCON,83,128,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_MAXCONSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,124,128,
+                    11,14
+    LTEXT           "( 0 表示无限 )",IDC_STATIC,140,130,48,8
+    EDITTEXT        IDC_TIMEOUT,83,149,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Spin1",IDC_TIMEOUTSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,124,154,11,14
+    LTEXT           "秒钟自动断线  ( 0 表示无限 )",IDC_STATIC,140,151,100,8
+    LTEXT           "同一 IP 地址允许的最大连线数：",IDC_STATIC,14,203,116,8,
+                    NOT WS_VISIBLE
+    EDITTEXT        IDC_MAXCONPERIP,134,201,46,14,ES_AUTOHSCROLL | ES_NUMBER | 
+                    NOT WS_VISIBLE
+    CONTROL         "Spin1",IDC_MAXCONPERIPSPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS | NOT WS_VISIBLE,172,201,11,14
+    LTEXT           "( 0 表示无限 )",IDC_STATIC,188,203,48,8,NOT WS_VISIBLE
+    CONTROL         "密码：",IDC_PASSWD_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,39,40,10
+    CONTROL         "上传速限：",IDC_MAXUSPEED_CHECK,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,84,56,10
+    CONTROL         "下载速限：",IDC_MAXDSPEED_CHECK,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,155,84,56,10
+    CONTROL         "最大连线数：",IDC_MAXCON_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,131,64,10
+    CONTROL         "空闲过久：",IDC_TIMEOUT_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,151,56,10
+    PUSHBUTTON      "配置文件访问权限 (&F)",IDC_FILE_PERM,7,179,108,14
+END
+
+IDD_USER_PERM DIALOGEX 0, 0, 444, 323
+STYLE WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_ACCEPTFILES
+CAPTION "文件访问权限"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "Tree1",IDC_DIRTREE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_DISABLEDRAGDROP | 
+                    TVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,7,109,271,
+                    WS_EX_CLIENTEDGE
+    CONTROL         "List1",IDC_FILELIST,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | 
+                    LVS_SHAREIMAGELISTS | LVS_AUTOARRANGE | WS_BORDER | 
+                    WS_TABSTOP,119,33,199,247,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "添加文件夹 (&D)",IDC_ADDDIR,335,7,102,14
+    PUSHBUTTON      "添加虚拟文件夹 (&V)",IDC_ADDVDIR,335,23,102,14
+    PUSHBUTTON      "添加文件 (&F)",IDC_ADDFILE,335,39,102,14
+    PUSHBUTTON      "重命名 (&N)",IDC_RENAME,335,55,102,14
+    PUSHBUTTON      "移除 (&R)",IDC_REMOVE,335,71,102,14
+    GROUPBOX        "允许的文件操作",IDC_ACCESS_GROUP,335,100,102,114
+    CONTROL         "继承上层权限",IDC_INHERIT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,113,64,10
+    CONTROL         "读取 (下载)",IDC_READ,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,125,55,10
+    CONTROL         "写入 (上传 / 修改)",IDC_WRITE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,137,77,10
+    CONTROL         "删除",IDC_DEL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,340,
+                    149,32,10
+    CONTROL         "续传",IDC_APPEND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    340,161,32,10
+    CONTROL         "列出文件",IDC_LIST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,173,48,10
+    CONTROL         "创建子目录",IDC_MKDIR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,185,56,10
+    CONTROL         "删除子目录",IDC_RMDIR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,340,197,56,10
+    CONTROL         "权限应用到子目录",IDC_SUBDIR,"Button",BS_AUTOCHECKBOX | 
+                    NOT WS_VISIBLE | WS_TABSTOP,340,209,80,10
+    EDITTEXT        IDC_DISPPATH,62,285,268,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_REALPATH,62,302,216,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "修改 (&B)",IDC_MODIFY_PATH,280,302,50,14
+    PUSHBUTTON      "确定(&O)",IDOK,387,285,50,14
+    PUSHBUTTON      "取消(&C)",IDCANCEL,387,302,50,14
+    LTEXT           "真实位置：",IDC_REALPATHSTATIC,7,304,41,8
+    LTEXT           "Static",IDC_SPLITTER,7,7,323,274,WS_BORDER
+    LTEXT           "FTP 路径：",IDC_DISPPATHSTATIC,7,287,40,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\mainfram.bmp"
+IDB_USERIMG             BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAIN                ICON    DISCARDABLE     "res\\PCManFTPD_GUI.ico"
+IDI_TRANSFERICON        ICON    DISCARDABLE     "USERICON.ICO"
+IDI_ICON                ICON    DISCARDABLE     "ICON1.ICO"
+IDI_USERICON            ICON    DISCARDABLE     "ICO00001.ICO"
+IDI_OFFLINEICON         ICON    DISCARDABLE     "res\\offlinei.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "启动 FTP Server (&O)",        ID_FILE_OPEN
+        MENUITEM "关闭 Server (&C)",            ID_FILE_CLOSE
+        MENUITEM SEPARATOR
+        MENUITEM "退出程序(&X)",                ID_APP_EXIT
+    END
+    POPUP "查看(&V)"
+    BEGIN
+        MENUITEM "设置 Server (&S)",            ID_VIEW_EDITSERVER
+        MENUITEM "设置用户帐号 (&U)",           ID_VIEW_EDITUSER
+        MENUITEM SEPARATOR
+        POPUP "用户(&U)"
+        BEGIN
+            MENUITEM "踢除选定的用户 (&K)",         ID_USERLIST_KICK
+            MENUITEM "禁止来自选定 IP 的连线 (&B)", ID_USERLIST_BAN
+        END
+        POPUP "文件传输 (&T)"
+        BEGIN
+            MENUITEM "取消选定的传输 (&C)",         ID_TRANSFERLIST_KICK
+            MENUITEM SEPARATOR
+            MENUITEM "踢除选定的用户 (&K)",         ID_TRANSFERLIST_KICK_USER
+
+            MENUITEM "禁止来自选定 IP 的连线 (&B)", ID_TRANSFERLIST_BAN
+        END
+        POPUP "连线记录(&E)"
+        BEGIN
+            MENUITEM "复制(&C)\tCtrl+C",            ID_EDIT_COPY
+            MENUITEM "全部清除(&R)",                ID_EDIT_CLEAR_ALL
+            MENUITEM SEPARATOR
+            MENUITEM "打开日志文件(&F)",            ID_LOG_OPENFILE
+        END
+        MENUITEM "文件传输记录 (&L)",           ID_VIEW_LOG
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "关于 PCMan's FTP Server (&A)...", ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP MENU DISCARDABLE 
+BEGIN
+    POPUP "USER"
+    BEGIN
+        MENUITEM "添加用户(&U)",                IDC_ADD_USER
+        MENUITEM "新建群组(&G)",                IDC_ADD_GROUP
+        MENUITEM "删除(&D)",                    IDC_DELETE
+    END
+    POPUP "MODIFY_PATH"
+    BEGIN
+        MENUITEM "选定文件夹路径(&D)",          ID_BROWSE_FOLDER
+        MENUITEM "选定文件路径(&F)",            ID_BROWSE_FILE
+        MENUITEM "设为虚拟文件夹(&V)",          ID_SET_VIRTUAL
+    END
+    POPUP "TRAY"
+    BEGIN
+        MENUITEM "关于 PCMan's FTP Server (&A)...", ID_APP_ABOUT
+        MENUITEM SEPARATOR
+        MENUITEM "退出程序(&X)",                ID_APP_EXIT
+        MENUITEM SEPARATOR
+        MENUITEM "启动 FTP Server (&O)",        ID_FILE_OPEN
+        MENUITEM "关闭 Server (&C)",            ID_FILE_CLOSE
+        MENUITEM SEPARATOR
+        MENUITEM "打开图形控制介面 (&O)",       ID_OPEN_MAINWINDOW
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
+BEGIN
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_CLOSE
+    SEPARATOR
+    BUTTON      ID_USERLIST_KICK
+    SEPARATOR
+    BUTTON      ID_VIEW_EDITSERVER
+    BUTTON      ID_VIEW_EDITUSER
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 244
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 118
+    END
+
+    IDD_SERVER_IPFILTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 240
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 162
+    END
+
+    IDD_SERVER_LOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 199
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 110
+    END
+
+    IDD_INPUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 38
+    END
+
+    IDD_LOG_VIEWER, DIALOG
+    BEGIN
+        RIGHTMARGIN, 467
+    END
+
+    IDD_SERVER_GENERAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 242
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 152
+    END
+
+    IDD_SERVER_MSG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 240
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 150
+    END
+
+    IDD_USER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 255
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 187
+    END
+
+    IDD_USER_GENERAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 291
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 217
+    END
+
+    IDD_USER_PERM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 437
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 316
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "PCMan's FTP Server [Offline]"
+    IDR_FILE_ACCESS         "文件访问权限"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDP_PARSE_INT       "请键入一整数."
+    AFX_IDP_PARSE_INT_RANGE "请键入一个在 %1 到 %2 之间的整数."
+    AFX_IDP_PARSE_STRING_SIZE "请键入少于 %1个文字."
+    AFX_IDP_PARSE_BYTE      "请键入一个在 0 到 225 之间的整数."
+    AFX_IDP_PARSE_UINT      "请键入一正整数."
+    IDS_GROUPS              "群组"
+    IDS_USERS               "用户"
+    IDS_NEW_FOLDER          "新文件夹"
+    IDS_QUERYDEL            "您是否确实要删除选定的项目?"
+    IDS_QUERY_QUIT          "您是否要退出 PCMan's FTP Server?"
+    IDS_GROUP_NONE          "不使用群组"
+    IDS_DISPFILE_NAME       "显示的文件名"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDD_USER_GENERAL        "常规设置"
+    IDD_USER_PERM           "文件访问权限"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FILE_SIZE           "文件大小"
+    IDS_USER                "用户"
+    IDS_IP_ADDRESS          "IP 地址"
+    IDS_ID                  "连线代号"
+    IDS_LOG_FULL_TITLE      "完整查看"
+    IDS_LOG_DOWNLOAD_TITLE  "下载文件"
+    IDS_LOG_UPLOAD_TITLE    "上传文件"
+    IDS_FILE_NAME           "文件名"
+    IDS_TIME                "时间"
+    IDS_TRANSFER_SPEED      "速率"
+    IDS_TRANSFER            "传输"
+    IDS_DOWNLOAD            "下载"
+    IDS_UPLOAD              "上传"
+    IDS_COMPLETE            "完成"
+    IDS_FILE_ALREADY_EXISTS "文件已经存在"
+    IDS_PROGRESS            "进度"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_USERLIST_KICK        "\n剔除选定的用户"
+    ID_VIEW_EDITSERVER      "\n设置 Server"
+    ID_VIEW_EDITUSER        "\n设置用户权限"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "PCMan's FTP Server"
+    AFX_IDS_IDLEMESSAGE     "就绪"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_OPEN            "\n启动 FTP Server"
+    ID_FILE_CLOSE           "\n关闭 Server"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR_ALL       "全部删除\n全部删除"
+    ID_EDIT_COPY            "复制选定内容到剪贴板中\n复制"
+    ID_EDIT_FIND            "查找指定文字\n查找"
+    ID_EDIT_PASTE           "插入剪贴板内容\n粘贴"
+    ID_EDIT_SELECT_ALL      "选定整篇文件\n选定全部"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "显示程序的信息， 版本及版权\n关于 PCMan's FTP Server"
+    ID_APP_EXIT             "退出应用程序并提示保存文件\n退出"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_EDIT_SERVER_TITLE   "Server 设置"
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

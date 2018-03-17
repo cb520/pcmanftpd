@@ -8,9 +8,9 @@ The original [GitHub](https://github.com/luke1987515/pcmanftpd) page.
 
 The application is suffering from many vulnerabilities which makes it susceptible to many exploits including:
 
-* Buffer overflow attacks
-* Directory traversal
-* Input validation 
+* Buffer overflow
+* Directory traversal attacks
+* Input validation errors
 
 ## The Patch:
 
